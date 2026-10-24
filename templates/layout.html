@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       {%if title%}
+       FastAPI Blog -{{title}}
+       {%else %}
+       FastAPI Blog
+       {%endif%}
+    </head>
+    <body>
+       {%block content%}
+       {%endblock content%}
+    </body>
+</html>
