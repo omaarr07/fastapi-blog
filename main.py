@@ -1,9 +1,12 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-app=FastAPI()
-templates= Jinja2Templates (directory="templates")
+app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
 
 posts: list[dict] = [
     {
@@ -17,20 +20,22 @@ posts: list[dict] = [
         "id": 2,
         "author": "Jane Doe",
         "title": "Python is Great for Web Development",
-        "content": "Python is a great language for web development , and FastAPI makes it even better.",
-        "date_posted": "April 21,2025",
+        "content": "Python is a great language for web development, and FastAPI makes it even better.",
+        "date_posted": "April 21, 2025",
     },
 ]
-@app.get('/',include_in_schema=False)
-@app.get('/posts',include_in_schema=False)
 
-def home(request : Request ):
-    return templates.TemplateResponse(request,"home.html" , {"posts":posts,"title":"Home"},)
-   
+
+@app.get("/", include_in_schema=False, name="home")
+@app.get("/posts", include_in_schema=False, name="posts")
+def home(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "home.html",
+        {"posts": posts, "title": "Home"},
+    )
 
 
 @app.get("/api/posts")
 def get_posts():
     return posts
-
-
